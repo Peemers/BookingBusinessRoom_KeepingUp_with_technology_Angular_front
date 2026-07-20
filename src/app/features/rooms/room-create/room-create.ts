@@ -15,6 +15,7 @@ export class RoomCreate {
   protected readonly roomForm: FormGroup = this.fb.group({
     location: ['', [Validators.required, Validators.minLength(2)]],
     maxCapacity: ['', [Validators.required, Validators.min(1)]],
+    name: ['', [Validators.required, Validators.minLength(3)]],
   });
 
   protected onSubmit(): void {
