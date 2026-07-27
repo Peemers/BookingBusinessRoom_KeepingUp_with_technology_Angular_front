@@ -21,6 +21,7 @@ export class BookingCreate implements OnInit {
   private readonly bookingService = inject(BookingService);
   private readonly formBuilder = inject(FormBuilder);
 
+  protected readonly isLoading = signal<true | false>(false);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly successMessage = signal<string | null>(null);
   protected readonly workers = signal<WorkerSummaryDto[]>([]);
@@ -33,7 +34,6 @@ export class BookingCreate implements OnInit {
   protected readonly bookingForm: FormGroup = this.formBuilder.group({
     roomId: ['', [Validators.required]],
     workerId: ['', [Validators.required]],
-    numberOfParticipant: [1, [Validators.required, Validators.min(1)]],
   });
 
   ngOnInit() {
@@ -51,14 +51,19 @@ export class BookingCreate implements OnInit {
     if (this.searchForm.invalid) {
       return;
     }
+
     const { startDate, endDate, minCapacity } = this.searchForm.value;
+
+    this.isLoading.set(true);
 
     this.roomService.getAvailableRooms(startDate, endDate, minCapacity).subscribe({
       next: (response: RoomSummaryDto[]) => {
         this.availableRooms.set(response);
+        this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
         this.errorMessage.set(err.error?.message ?? 'Une erreur est survenue.');
+        this.isLoading.set(false);
       },
     });
   }
@@ -67,15 +72,16 @@ export class BookingCreate implements OnInit {
     if (this.bookingForm.invalid) {
       return;
     }
-    const { startDate, endDate } = this.searchForm.value;
-    const { roomId, workerId, numberOfParticipant } = this.bookingForm.value;
+    this.isLoading.set(true);
+    const { startDate, endDate, minCapacity } = this.searchForm.value;
+    const { roomId, workerId } = this.bookingForm.value;
 
     const dto: CreateBookingRequestDto = {
       startDate,
       endDate,
       roomId,
       workerId,
-      numberOfParticipant,
+      numberOfParticipant: minCapacity,
     };
 
     this.bookingService.createBooking(dto).subscribe({
@@ -83,9 +89,11 @@ export class BookingCreate implements OnInit {
         this.successMessage.set(
           `Votre réservation pour la salle : "${response.room.name}" a été créé avec succes. Date de début : ${response.startDate}`,
         );
+        this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
         this.errorMessage.set(err.error?.message ?? 'Une erreur est survenue.');
+        this.isLoading.set(false);
       },
     });
   }

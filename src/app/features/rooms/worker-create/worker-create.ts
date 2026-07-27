@@ -17,6 +17,7 @@ export class WorkerCreate {
 
   protected readonly errorMessage = signal<string | null>(null)
   protected readonly successMessage = signal<string | null>(null)
+  protected readonly isLoading = signal<true | false>(false)
 
   protected readonly workerForm: FormGroup = this.fb.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -28,6 +29,7 @@ export class WorkerCreate {
     if (this.workerForm.invalid) {
       return;
     }
+    this.isLoading.set(true);
 
     this.successMessage.set(null);
     this.errorMessage.set(null);
@@ -36,9 +38,11 @@ export class WorkerCreate {
       next: (response: WorkerResponseDto) => {
         this.successMessage.set(`Travailleur : "${response.firstName} ${response.lastName}" a été créé avec succes.`);
         this.workerForm.reset();
+        this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
         this.errorMessage.set(err.error?.message ?? 'une erreur est survenue.');
+        this.isLoading.set(false);
       },
     });
   }
