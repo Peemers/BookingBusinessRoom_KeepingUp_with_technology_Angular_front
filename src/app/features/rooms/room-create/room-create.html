@@ -2,7 +2,7 @@
   <form [formGroup]="roomForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-xl min-w-xl mx-auto p-6">
     <div class="border rounded-lg shadow-2xl p-6 bg-white">
       <h1 class="underline text-2xl mb-6 ">Entrez les données de la salle :</h1>
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1 mb-4">
         <label for="name">Nom de la salle</label>
         <input
           id="name"
@@ -11,7 +11,7 @@
           class="border rounded px-3 py-2"
         />
       </div>
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1 mb-4">
         <label for="location">Localisation de la salle (ex: 1er étage, aile C)</label>
         <input
           id="location"
@@ -20,7 +20,7 @@
           class="border rounded px-3 py-2"
         />
       </div>
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1 mb-4">
         <label for="maxCapacity">Capacité maximale</label>
         <input
           id="maxCapacity"

@@ -26,6 +26,6 @@ export class RoomCreate {
     this.roomService.createRoom(this.roomForm.value).subscribe({
       next: (response) => console.log('Room créée', response),
       error: (error) => console.error('Erreur', error),
-    });
+    }); //todo pas oublier de faire l'appel au service ici lol.
   }
 }

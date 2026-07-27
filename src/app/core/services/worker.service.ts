@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CreateWorkerRequestDto } from '../models/create-worker-request.model';
 import { Observable } from 'rxjs';
 import { WorkerResponseDto } from '../models/worker-response.model';
+import { WorkerSummaryDto } from '../models/worker-summary.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,5 +14,9 @@ export class WorkerService {
 
   createWorker(dto: CreateWorkerRequestDto): Observable<WorkerResponseDto> {
     return this.http.post<WorkerResponseDto>(this.apiUrl, dto);
+  }
+
+  getAllWorkers(): Observable<WorkerSummaryDto[]> {
+    return this.http.get<WorkerSummaryDto[]>(this.apiUrl);
   }
 }

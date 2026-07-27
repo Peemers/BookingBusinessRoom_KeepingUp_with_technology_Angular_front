@@ -1,0 +1,96 @@
+<div class="min-h-screen flex bg-gradient-to-bl from-gray-200 to-gray-500 p-6">
+  <div class="w-1/2 flex">
+
+    <form [formGroup]="searchForm" (ngSubmit)="onSearchRoom()" class="border rounded-lg shadow-2xl p-6 bg-white flex flex-col gap-4 w-full">
+      <h1 class="text-2xl underline mb-2">Rechercher une salle disponible</h1>
+
+      @if (errorMessage()) {
+        <div class="bg-red-100 text-red-800 border border-b-red-300 rounded px-4 py-2">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="flex flex-col gap-1">
+        <label for="startDate">Date de début</label>
+        <input id="startDate" type="datetime-local" formControlName="startDate" class="border rounded px-3 py-2" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="endDate">Date de fin</label>
+        <input id="endDate" type="datetime-local" formControlName="endDate" class="border rounded px-3 py-2" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="minCapacity">Nombre de places désirées</label>
+        <input id="minCapacity" type="number" formControlName="minCapacity" class="border rounded px-3 py-2" />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="searchForm.invalid"
+        class="mt-4 bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50"
+      >Rechercher
+      </button>
+    </form>
+  </div>
+  <div class="w-1/2">
+    <div class="border rounded-lg shadow-2xl p-6 bg-white min-h-full">
+      <h2 class="text-xl mb-4">Salle disponibles</h2>
+      @if (availableRooms().length > 0) {
+        <ul class="flex flex-col gap-2">
+          @for (room of availableRooms(); track room.id) {
+            <li class="border rounded px-3 py-2">
+              {{ room.name }} - {{ room.location }}
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="text-gray-400">Aucune recherche effectuée pour l'instant</p>
+      }
+    </div>
+    @if (availableRooms().length > 0) {
+      <form [formGroup]="bookingForm" (ngSubmit)="onCreateBooking()" class="border rounded-lg shadow-2xl p-6 bg-white flex flex-col gap-4 mt-6">
+        <h2 class="text-xl mb-2">Finaliser la réservation</h2>
+
+        @if (successMessage()) {
+          <div class="bg-green-100 text-green-800 border border-green-300 rounded px-4 py-2">
+            {{ successMessage() }}
+          </div>
+        }
+
+        <div class="flex flex-col gap-1">
+          <label for="roomId">Salle</label>
+          <select id="roomId" formControlName="roomId" class="border rounded px-3 py-2">
+            <option value="" disabled>Choisir une salle</option>
+            @for (room of availableRooms(); track room.id) {
+              <option [value]="room.id">{{ room.name }} — {{ room.location }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="workerId">Employé</label>
+          <select id="workerId" formControlName="workerId" class="border rounded px-3 py-2">
+            <option value="" disabled>Choisir un employé</option>
+            @for (worker of workers(); track worker.id) {
+              <option [value]="worker.id">{{ worker.firstName }} {{ worker.lastName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="numberOfParticipant">Nombre de participants</label>
+          <input id="numberOfParticipant" type="number" formControlName="numberOfParticipant" class="border rounded px-3 py-2" />
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="bookingForm.invalid"
+          class="mt-4 bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50"
+        >
+          Créer la réservation
+        </button>
+      </form>
+    }
+  </div>
+</div>

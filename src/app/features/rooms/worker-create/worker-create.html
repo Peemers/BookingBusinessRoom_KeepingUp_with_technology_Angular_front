@@ -1,0 +1,52 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-bl from-gray-200 to-gray500">
+  <form [formGroup]="workerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-xl min-w-xl mx-auto p-6">
+    <div class="border rounded-lg shadow-2xl p-6 bg-white">
+      <h1 class="underline text-2xl mb-6">Entrez les données du travailleur :</h1>
+
+      @if (successMessage()){
+        <div class="bg-green-100 text-green-800 border border-green-300 rounded px-4 py-2 mb-4">
+          {{successMessage()}}
+        </div>
+      }
+      @if(errorMessage()){
+        <div class="bg-red-100 text-red-500 border border-red-300 rounded px-4 py-2 mb-4">
+          {{errorMessage()}}
+        </div>
+      }
+      <div class="flex flex-col gap-1 mb-4">
+        <label for="firstName">Prénom du travailleur</label>
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          class="border rounded px-3 py-2"
+        />
+      </div>
+      <div class="flex flex-col gap-1 mb-4">
+        <label for="lastName">Nom de famille du travailleur</label>
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          class="border rounded px-3 py-2"
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="email">Adresse email du travailleur</label>
+        <input
+          id="email"
+          type="text"
+          formControlName="email"
+          class="border rounded px-3 py-2"
+        />
+      </div>
+      <button
+        type="submit"
+        [disabled]="workerForm.invalid"
+        class="mt-7 bg-gradient-to-br from-accent-blue-300 via-blue-500 to-black text-white rounded px-4 py-2 disabled:opacity-50 hover:from-pink-500 hover:via-pink-700 hover:to-orange-500"
+      >
+        Créer le travailleur
+      </button>
+    </div>
+  </form>
+</div>
